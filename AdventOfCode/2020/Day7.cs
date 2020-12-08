@@ -31,14 +31,14 @@ namespace AdventOfCode._2020
                             .ToList());
 
                 carries.AddOrUpdate(s[0], other,
-                    (str, list) =>
+                    (_, list) =>
                     {
                         list.AddRange(other);
                         return list;
                     });
                 other.ForEach(o => isCarriedBy.AddOrUpdate(o.Item1,
                     new List<string> {s[0]},
-                    (str, list) =>
+                    (_, list) =>
                     {
                         list.Add(s[0]);
                         return list;
@@ -78,7 +78,7 @@ namespace AdventOfCode._2020
                     var (item1, item2) = color;
                     var count = item2 * item.Item2;
                     res.AddOrUpdate(item1, count,
-                        (s, i) => i + count);
+                        (_, i) => i + count);
                     queue.Enqueue((item1, count));
                 });
             }
