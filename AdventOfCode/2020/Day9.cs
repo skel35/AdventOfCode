@@ -12,7 +12,7 @@ namespace AdventOfCode._2020
         protected override void Solve()
         {
             var nums = ReadLines().Select(long.Parse).ToArray();
-            var P = 25;
+            // var P = 25;
             // for (var i = P; i < nums.Length; i++)
             // {
             //     bool good = false;
