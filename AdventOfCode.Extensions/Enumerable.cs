@@ -163,6 +163,27 @@ namespace AdventOfCode
             return res;
         }
 
+        public static IEnumerable<(TSource, TSource)> Pairwise<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            return _(); IEnumerable<(TSource, TSource)> _()
+            {
+                using var e = source.GetEnumerator();
+
+                if (!e.MoveNext())
+                    yield break;
+
+                var previous = e.Current;
+                while (e.MoveNext())
+                {
+                    yield return (previous, e.Current);
+                    previous = e.Current;
+                }
+            }
+        }
+
+
         public static IEnumerable<TResult> Pairwise<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TSource, TResult> resultSelector)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
