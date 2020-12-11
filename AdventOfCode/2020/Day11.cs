@@ -35,14 +35,13 @@ namespace AdventOfCode._2020
                         while (true)
                         {
                             if (!p.InBounds(grid)) return 0;
-                            // if (grid.At(p) == '.') continue;
                             if (grid.At(p) == 'L') return 0;
                             if (grid.At(p) == '#') return 1;
                             p = p.Plus(dir);
                         }
                     });
                     // var count = (r, c).Gen8Adjacent()
-                    //     .Where(p => p.InBounds(-1, grid.Length, -1, grid[0].Length))
+                    //     .Where(p => p.InBounds(grid))
                     //     .Count(p => grid.At(p) == '#');
                     if (grid[r][c] == 'L' && countOccupied == 0)
                     {
