@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace AdventOfCode
 {
@@ -46,6 +47,11 @@ namespace AdventOfCode
         public static bool InBounds(this (int R, int C) point, int rLeft, int rRight, int cLeft, int cRight)
         {
             return point.R > rLeft && point.C > cLeft && point.R < rRight && point.C < cRight;
+        }
+
+        public static bool InBounds(this (int R, int C) point, StringBuilder[] grid)
+        {
+            return point.R >= 0 && point.C >= 0 && point.R < grid.Length && point.C < grid[0].Length;
         }
 
         
