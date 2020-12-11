@@ -10,7 +10,12 @@ namespace AdventOfCode._2020
     {
         public Day11() : base(11, 2020) { }
         protected override void Solve()
-        { 
+        {
+            var input =
+                ReadLines()
+                .Select(line => line.Split())
+                .ToArray();
+
         }
     }
 }
