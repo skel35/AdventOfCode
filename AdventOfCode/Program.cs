@@ -11,7 +11,7 @@ namespace AdventOfCode
     {
         static void Main()
         {
-            var day = new Day12();
+            var day = new Day13();
             day.Run();
         }
     }
