@@ -10,7 +10,9 @@ namespace AdventOfCode._2020
     {
         public Day14() : base(14, 2020) { }
         protected override void Solve()
-        { 
+        {
+            var input =
+                ReadLines();
         }
     }
 }
