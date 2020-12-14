@@ -45,7 +45,8 @@ namespace AdventOfCode._2020
                         90 => dir.Right(),
                         180 => dir.Opposite(),
                         _ => dir.Left()
-                    })
+                    }),
+                    _ => throw new ArgumentOutOfRangeException()
                 };
             }
 

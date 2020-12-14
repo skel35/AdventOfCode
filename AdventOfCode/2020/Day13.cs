@@ -50,7 +50,7 @@ namespace AdventOfCode._2020
              //     1 * 57417764290211 * 8 +
              //     14 * 64172795383177 * 15 +
              //     10 * 83918270885693 * 4;
-             var lcm = 1090937521514009; // Wolfram Alpha
+             // var lcm = 1090937521514009; // Wolfram Alpha
              // var num = 776257269215190994 % lcm;
              var num = 600691418730595;
             for (var ts = num;;)
