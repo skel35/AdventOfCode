@@ -59,6 +59,8 @@ namespace AdventOfCode
         public static int ToInt(this string s) => int.Parse(s);
 
         public static long ToLong(this string s) => long.Parse(s);
+        public static ulong ToUlong(this string s) => ulong.Parse(s);
+
         public static string ToHexString(this byte[] array) => string.Concat(array.Select(b => b.ToString("x2")).ToArray());
         public static char Last(this string s) => s[^1];
     }

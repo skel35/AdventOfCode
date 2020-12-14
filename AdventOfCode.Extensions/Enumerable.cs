@@ -110,6 +110,9 @@ namespace AdventOfCode
         public static long SumLong<T>(this IEnumerable<T> enumerable, Func<T, int> valueFunc) =>
             enumerable.Aggregate<T, long>(0, (current, n) => valueFunc(n) + current);
 
+        public static ulong Sum(this IEnumerable<ulong> s)
+            => s.Aggregate(0ul, (current, n) => current + n);
+
         public static T[] ToArray<T>(this IEnumerable<T> enumerable, int capacity)
         {
             var res = new T[capacity];
