@@ -12,38 +12,29 @@ namespace AdventOfCode._2020
         protected override void Solve()
         {
             var input =
-                "8,0,17,4,1,12".SplitBy(',').Select(int.Parse).ToArray();
-            var dict = new Dictionary<int, int>();
-            var dict2 = new Dictionary<int, int>();
-            for (var i = 0; i < input.Length; i++)
-            {
-                dict.Add(input[i], i);
-            }
+                new[] {8, 0, 17, 4, 1, 12};
+            
+            var last = new Dictionary<int, int>();
+            var nextToLast = new Dictionary<int, int>();
+            input.WithIndex().ForEach(t => last.Add(t.Item, t.Index));
 
-            int prev = input.Last();
-
+            var prev = input.Last();
             var index = input.Length;
             while (true)
             {
-                int num;
-                if (!dict2.ContainsKey(prev))
-                {
-                    num = 0;
-                }
-                else
-                {
-                    num = dict[prev] - dict2[prev];
-                }
+                var num =
+                    nextToLast.ContainsKey(prev)
+                    ? (index - 1) - nextToLast[prev]
+                    : 0;
 
-                if (dict.ContainsKey(num))
-                    dict2[num] = dict[num];
-                dict[num] = index;
-                if (index == 30000000 - 1)
+                if (last.ContainsKey(num))
+                    nextToLast[num] = last[num];
+                last[num] = index;
+                if (index == 2020 - 1)
                 {
                     Console.WriteLine(num);
                     return;
                 }
-                // Console.WriteLine(num);
 
                 index++;
                 prev = num;
