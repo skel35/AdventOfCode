@@ -9,6 +9,7 @@ namespace AdventOfCode
     public static partial class AoC
     {
         public static ref T At<T>(this T[,] twoDimArray, (int, int) point) => ref twoDimArray[point.Item1, point.Item2];
+        public static ref T At<T>(this T[,,] threeDimArray, (int, int, int) point) => ref threeDimArray[point.Item1, point.Item2, point.Item3];
         public static ref T At<T>(this T[][] twoDimArray, (int, int) point) => ref twoDimArray[point.Item1][point.Item2];
         public static bool At(this BitArray[] twoDimArray, (int, int) point) => twoDimArray[point.Item1][point.Item2];
         public static char At(this string[] twoDimArray, (int, int) point) => twoDimArray[point.Item1][point.Item2];
@@ -58,5 +59,31 @@ namespace AdventOfCode
             Array.Copy(source, res, source.Length);
             return res;
         }
+
+        public static IEnumerable<T> Flatten<T>(this T[,] map)
+        {
+            for (var row = 0; row < map.GetLength(0); row++)
+            {
+                for (var col = 0; col < map.GetLength(1); col++)
+                {
+                    yield return map[row,col];
+                }
+            }
+        }
+
+        public static IEnumerable<T> Flatten<T>(this T[,,] map)
+        {
+            for (var row = 0; row < map.GetLength(0); row++)
+            {
+                for (var col = 0; col < map.GetLength(1); col++)
+                {
+                    for (var z = 0; z < map.GetLength(2); z++)
+                    {
+                        yield return map[row,col,z];
+                    }
+                }
+            }
+        }
+
     }
 }

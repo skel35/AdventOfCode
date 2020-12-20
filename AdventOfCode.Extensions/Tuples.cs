@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode
@@ -77,6 +78,18 @@ namespace AdventOfCode
                 (r + 1, c - 1), (r + 1, c), (r + 1, c + 1)
             };
         }
+
+        public static (int X, int Y, int Z)[] Gen26Adjacent(this (int X, int Y, int Z) point)
+        {
+            var (x, y, z) = point;
+            return (x, y)
+                .Gen8Adjacent()
+                .Select(t => new[] {(t.R, t.C, z), (t.R, t.C, z - 1), (t.R, t.C, z + 1)})
+                .Append(new[] {(x, y, z - 1), (x, y, z + 1)})
+                .SelectMany(a => a)
+                .ToArray();
+        }
+
 
         public static (int R, int C)[] Gen4Adjacent(this (int, int) point)
         {
