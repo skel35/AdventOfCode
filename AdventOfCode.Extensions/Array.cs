@@ -10,6 +10,7 @@ namespace AdventOfCode
     {
         public static ref T At<T>(this T[,] twoDimArray, (int, int) point) => ref twoDimArray[point.Item1, point.Item2];
         public static ref T At<T>(this T[,,] threeDimArray, (int, int, int) point) => ref threeDimArray[point.Item1, point.Item2, point.Item3];
+        public static ref T At<T>(this T[,,,] fourDimArray, (int, int, int, int) point) => ref fourDimArray[point.Item1, point.Item2, point.Item3, point.Item4];
         public static ref T At<T>(this T[][] twoDimArray, (int, int) point) => ref twoDimArray[point.Item1][point.Item2];
         public static bool At(this BitArray[] twoDimArray, (int, int) point) => twoDimArray[point.Item1][point.Item2];
         public static char At(this string[] twoDimArray, (int, int) point) => twoDimArray[point.Item1][point.Item2];
@@ -84,6 +85,24 @@ namespace AdventOfCode
                 }
             }
         }
+
+        public static IEnumerable<T> Flatten<T>(this T[,,,] map)
+        {
+            for (var row = 0; row < map.GetLength(0); row++)
+            {
+                for (var col = 0; col < map.GetLength(1); col++)
+                {
+                    for (var z = 0; z < map.GetLength(2); z++)
+                    {
+                        for (var w = 0; w < map.GetLength(3); w++)
+                        {
+                            yield return map[row, col, z, w];
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }

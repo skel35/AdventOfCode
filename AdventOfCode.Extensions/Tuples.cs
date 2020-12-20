@@ -68,6 +68,12 @@ namespace AdventOfCode
                    point.x >= sizeX || point.y >= sizeY || point.z >= sizeZ;
         }
 
+        public static bool OutOfBounds(this (int x, int y, int z, int w) point, int sizeX, int sizeY, int sizeZ, int sizeW)
+        {
+            return point.x < 0 || point.y < 0 || point.z < 0 || point.w < 0 ||
+                   point.x >= sizeX || point.y >= sizeY || point.z >= sizeZ || point.w >= sizeW;
+        }
+
         public static (int R, int C)[] Gen8Adjacent(this (int R, int C) point)
         {
             var (r, c) = point;
@@ -90,6 +96,16 @@ namespace AdventOfCode
                 .ToArray();
         }
 
+        public static (int X, int Y, int Z, int W)[] Gen80Adjacent(this (int X, int Y, int Z, int W) point)
+        {
+            var (x, y, z, w) = point;
+            return (x, y, z)
+                .Gen26Adjacent()
+                .Select(t => new[] {(t.X, t.Y, t.Z, w), (t.X, t.Y, t.Z, w - 1), (t.X, t.Y, t.Z, w + 1)})
+                .Append(new[] {(x, y, z, w - 1), (x, y, z, w + 1)})
+                .SelectMany(a => a)
+                .ToArray();
+        }
 
         public static (int R, int C)[] Gen4Adjacent(this (int, int) point)
         {
