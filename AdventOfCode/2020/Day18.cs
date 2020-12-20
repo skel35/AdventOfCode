@@ -18,15 +18,17 @@ namespace AdventOfCode._2020
 
             long Calculate(string[] tokens)
             {
-                void ProcessNum(Stack<string> stack1, string t)
+                bool Process(Stack<string> stack1, string t, string op)
                 {
-                    if (stack1.Peek().IsOp())
+                    if (stack1.Peek() == op)
                     {
                         stack1.Push(stack1.Pop().ApplyOp(stack1.Pop(), t));
+                        return true;
                     }
                     else
                     {
                         stack1.Push(t);
+                        return false;
                     }
                 }
 
@@ -37,7 +39,8 @@ namespace AdventOfCode._2020
                     switch (t)
                     {
                         case {} when t.IsNumber():
-                            ProcessNum(stack, t);
+                            Process(stack, t, "+");
+                            // stack.Push(t);
                             break;
                         case {} when t.IsOp():
                             stack.Push(t);
@@ -46,13 +49,23 @@ namespace AdventOfCode._2020
                             stack.Push(t);
                             break;
                         case {} when t == ")":
+                            while (true)
+                            {
+                                if (!Process(stack, stack.Pop(), "*"))
+                                    break;
+                            }
                             var temp = stack.Pop();
                             (stack.Pop() == "(").Assert();
-                            ProcessNum(stack, temp);
+                            Process(stack, temp, "+");
                             break;
                     }
                 }
 
+                while (true)
+                {
+                    if (!Process(stack, stack.Pop(), "*"))
+                        break;
+                }
                 var calculated = stack.Pop();
                 calculated.IsNumber().Assert();
                 return calculated.ToLong();
