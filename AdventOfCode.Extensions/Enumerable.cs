@@ -242,5 +242,15 @@ namespace AdventOfCode
         {
             return (condition ? branchIf : branchElse)(source);
         }
+
+        public static TResult If<TSource, TResult>(
+            this IList<TSource> source,
+            Func<IList<TSource>, bool> condition,
+            Func<IList<TSource>, TResult> branchIf,
+            Func<IList<TSource>, TResult> branchElse)
+        {
+            return (condition(source) ? branchIf : branchElse)(source);
+        }
+
     }
 }
