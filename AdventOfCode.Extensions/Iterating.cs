@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode
@@ -410,6 +411,9 @@ namespace AdventOfCode
                 item = res.Value.Item2;
             }
         }
+
+        public static IEnumerable<int> Linq(this Range range)
+            => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value);
 
     }
 }

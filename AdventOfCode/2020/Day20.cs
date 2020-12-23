@@ -79,6 +79,86 @@ namespace AdventOfCode._2020
                 return tileToBorders[tileNum1].Any(b => tileToBorders[tileNum2].Contains(b));
             }
 
+            int BorderIndex(int tile, int tileToMatch)
+            {
+                return
+                    tileToBorders[tile]
+                        .Take(4)
+                        .WithIndex()
+                        .Single(t => tileToBorders[tileToMatch].Contains(t.Item))
+                        .Index;
+            }
+
+            char[,] Rotate2(char[,] tile, int clockwise)
+            {
+                (tile.GetLength(1) == tile.GetLength(0)).Assert();
+                var res = new char[tile.GetLength(0), tile.GetLength(1)];
+                for (var i = 0; i < tile.GetLength(0); i++)
+                {
+                    for (var j = 0; j < tile.GetLength(1); j++)
+                    {
+                        if (clockwise == 0)
+                        {
+                            res[i, j] = tile[i,j];
+                        }
+                        else if (clockwise == 180)
+                        {
+                            res[tile.GetLength(0) - 1 - i, tile.GetLength(0) - 1 - j] = tile[i,j];
+                        }
+                        else if (clockwise == 90)
+                        {
+                            res[j, tile.GetLength(0) - 1 - i] = tile[i,j];
+                        }
+                        else if (clockwise == 270)
+                        {
+                            res[tile.GetLength(0) - 1 - j, i] = tile[i,j];
+                        }
+                    }
+                }
+                return res;
+            }
+
+
+            char[,] Rotate(string[] tile, int clockwise)
+            {
+                (tile.Length == tile[0].Length).Assert();
+                var res = new char[tile.Length, tile[0].Length];
+                for (var i = 0; i < tile.Length; i++)
+                {
+                    for (var j = 0; j < tile[0].Length; j++)
+                    {
+                        if (clockwise == 0)
+                        {
+                            res[i, j] = tile[i][j];
+                        }
+                        else if (clockwise == 180)
+                        {
+                            res[tile.Length - 1 - i, tile.Length - 1 - j] = tile[i][j];
+                        }
+                        else if (clockwise == 90)
+                        {
+                            res[j, tile.Length - 1 - i] = tile[i][j];
+                        }
+                        else if (clockwise == 270)
+                        {
+                            res[tile.Length - 1 - j, i] = tile[i][j];
+                        }
+                    }
+                }
+                return res;
+            }
+
+            void FlipHorizontal(char[,] tile)
+            {
+                for (var j = 0; j < tile.GetLength(0); j++)
+                {
+                    for (var i = 0; i < tile.GetLength(1) / 2; i++)
+                    {
+                        AoC.Swap(ref tile[j, i], ref tile[j, tile.GetLength(1) - 1 - i]);
+                    }
+                }
+            }
+
             var size = (int) Round(Sqrt(input.Count));
             var resultGrid = new int[size, size];
             resultGrid[0, 0] = corners[0];
@@ -95,15 +175,11 @@ namespace AdventOfCode._2020
                 unusedBorders.Remove(resultGrid[0, i]);
                 for (var j = 1; j < i; j++)
                 {
-                    // var lu1 = LinedUp(resultGrid[i, j - 1]).ToHashSet();
-                    // var lu2 = LinedUp(resultGrid[i - 1, j]).ToHashSet();
-                    // lu1.IntersectWith(lu2);
                     resultGrid[i, j] =
                         LinedUp(resultGrid[i, j - 1])
                             .Intersect(
                                 LinedUp(resultGrid[i - 1, j]))
                             .Except(resultGrid[i - 1, j - 1])
-                        // lu1
                             .Single();
 
                     resultGrid[j, i] =
@@ -142,23 +218,125 @@ namespace AdventOfCode._2020
 
             resultGrid.Print();
 
-            var resultTilesSize = resultGrid.Length * (input[0].Length - 2);
+            var tileSize = input.Values.First().Length;
+            var sizeTrimmed = tileSize - 2;
+            var resultTilesSize = resultGrid.GetLength(0) * sizeTrimmed;
             var resultTiles = new char[resultTilesSize, resultTilesSize];
 
             for (var i = 0; i < resultGrid.GetLength(0); i++)
             {
                 for (var j = 0; j < resultGrid.GetLength(1); j++)
                 {
-                    var tile = input[resultGrid[i, j]];
-                    for (var ii = 1; ii < tile.Length - 1; ii++)
+                    // rotate&flip to align with neighbors
+                    var tileNum = resultGrid[i, j];
+                    var tile = input[tileNum];
+                    // var borders = tileToBorders[tileNum];
+                    char[,] rotated;
+                    if (i == 0)
                     {
-                        for (var jj = 1; jj < tile[ii].Length - 1; jj++)
+                        var borderIndex = BorderIndex(tileNum, resultGrid[i + 1, j]);
+                        rotated = Rotate(tile, borderIndex switch
                         {
-                            // resultTiles[i * (input[0].Length - 2) + (ii - 1), j * (input[0].Length - 2) + (jj - 1)]
+                            0 => 180,
+                            1 => 0,
+                            2 => 270,
+                            3 => 90
+                        });
+                    }
+                    else
+                    {
+                        var borderIndex = BorderIndex(tileNum, resultGrid[i - 1, j]);
+                        rotated = Rotate(tile, borderIndex switch
+                        {
+                            0 => 0,
+                            1 => 180,
+                            2 => 90,
+                            3 => 270
+                        });
+                    }
+
+                    // rotated.Print();
+
+                    if (j == 0)
+                    {
+                        var rightBorder = (0..tileSize).Linq().Select(x => rotated[x, tileSize - 1]).ToStr();
+                        // check if matches with resultGrid[i, j + 1]
+                        var isMatch = tileToBorders[resultGrid[i, j + 1]].Contains(rightBorder);
+                        // if not -> flip horizontally
+                        if (!isMatch)
+                        {
+                            FlipHorizontal(rotated);
+                        }
+                    }
+                    else
+                    {
+                        var leftBorder = (0..tileSize).Linq().Select(x => rotated[x, 0]).ToStr();
+                        var isMatch = tileToBorders[resultGrid[i, j - 1]].Contains(leftBorder);
+                        // if not -> flip horizontally
+                        if (!isMatch)
+                        {
+                            FlipHorizontal(rotated);
+                        }
+                    }
+
+                    for (var ii = 1; ii < rotated.GetLength(0) - 1; ii++)
+                    {
+                        for (var jj = 1; jj < rotated.GetLength(1) - 1; jj++)
+                        {
+                            resultTiles[i * sizeTrimmed + (ii - 1), j * sizeTrimmed + (jj - 1)] = rotated[ii, jj];
                         }
                     }
                 }
             }
+            // FlipHorizontal(resultTiles);
+            resultTiles = Rotate2(resultTiles, 90);
+
+            resultTiles.Print();
+
+
+            var pattern = new int[,]
+            {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+                {1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1},
+                {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+            };
+
+            bool IsPattern(char[,] bigTile, int rowOffset, int colOffset)
+            {
+                if (rowOffset + pattern.GetLength(0) > bigTile.GetLength(0)) return false;
+                if (colOffset + pattern.GetLength(1) > bigTile.GetLength(1)) return false;
+                var res = true;
+                pattern.Iter((r, c, item) =>
+                {
+                    if (item == 0) return;
+                    if (bigTile[rowOffset + r, colOffset + c] != '#') res = false;
+                });
+                return res;
+            }
+
+            HashSet<(int, int)> seaMonster = new();
+
+            var count = 0;
+            for (var i = 0; i < resultTiles.GetLength(0); i++)
+            {
+                for (var j = 0; j < resultTiles.GetLength(1); j++)
+                {
+                    if (IsPattern(resultTiles, i, j))
+                    {
+                        var ii = i;
+                        var jj = j;
+                        pattern.Iter((r, c, item) =>
+                        {
+                            if (item == 1) seaMonster.Add((ii + r, jj + c));
+                        });
+                    }
+
+                    if (resultTiles[i, j] == '#') count++;
+                }
+            }
+
+            count -= seaMonster.Count;
+            Console.WriteLine(count);
         }
     }
 }
