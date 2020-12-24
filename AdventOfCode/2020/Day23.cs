@@ -11,29 +11,54 @@ namespace AdventOfCode._2020
         public Day23() : base(23, 2020) { }
         protected override void Solve()
         {
-            // var input = "476138259";
             var input = "476138259".ToCharArray().Select(c => c.ToInt()).ToList();
-            // var input = "389125467".ToCharArray().Select(c => c.ToInt()).ToList();
+            var dict = new Dictionary<int, LinkedListNode<int>>();
+            var ll = new LinkedList<int>();
 
-            var currentIndex = 0;
-            for (var i = 0; i < 100; i++)
+            var maxValue = 1_000_000;
+
+            void AddNode(int x)
             {
-                var current = input[currentIndex];
-                var (take, rest) = input.TakeAndSplit(currentIndex + 1, 3);
-                var restList = rest.ToList();
-                var destination =
-                    restList
-                        .MinWithIndex(x => current - x <= 0 ? current - x + 10 : current - x);
-                // Console.WriteLine($"destination: {destination.item}");
-                restList.InsertRange(destination.index + 1, take);
-                currentIndex = (restList.FindIndex(x => x == current) + 1)%restList.Count;
-                input = restList;
+                var node = new LinkedListNode<int>(x);
+                ll.AddLast(node);
+                dict.Add(x, node);
+            }
+            input.ForEach(AddNode);
 
-                // Console.WriteLine(string.Join("", input));
+            Enumerable.Range(10, maxValue - 9)
+                .ForEach(AddNode);
+            var currentNode = ll.First!;
+            for (var i = 0; i < 10_000_000; i++)
+            {
+                var skipped1 = ll.NextCircular(currentNode, 1);
+                var skipped2 = ll.NextCircular(skipped1, 1);
+                var skipped3 = ll.NextCircular(skipped2, 1);
+                ll.Remove(skipped1);
+                ll.Remove(skipped2);
+                ll.Remove(skipped3);
+                bool IsSkipped(int x) => x == skipped1.Value ||
+                                         x == skipped2.Value ||
+                                         x == skipped3.Value;
+
+                int Prev(int x) => x - 1 <= 0 ? maxValue : x - 1;
+                var destinationValue = currentNode.Value;
+                do
+                {
+                    destinationValue = Prev(destinationValue);
+                } while (IsSkipped(destinationValue));
+
+                var destinationNode = dict[destinationValue];
+                ll.AddAfter(destinationNode, skipped1);
+                ll.AddAfter(skipped1, skipped2);
+                ll.AddAfter(skipped2, skipped3);
+
+                currentNode = ll.NextCircular(currentNode, 1);
             }
 
-            var indexOf1 = input.FindIndex(x => x == 1);
-            var res = string.Join("", input.Skip(indexOf1 + 1).Concat(input.Take(indexOf1)));
+            var one = dict[1];
+            var oneNext = one.Next;
+            var oneNextNext = oneNext.Next;
+            var res = (long) oneNext.Value * (long) oneNextNext.Value;
             Console.WriteLine(res);
         }
     }
