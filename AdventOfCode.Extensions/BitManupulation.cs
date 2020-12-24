@@ -28,6 +28,18 @@ namespace AdventOfCode
             return n;
         }
 
+        public static bool[] ToBoolArray(this int n, int size)
+        {
+            var res = new bool[size];
+            while (n > 0)
+            {
+                res[--size] = n % 2 == 1;
+                n /= 2;
+            }
+
+            return res;
+        }
+
 
         public static bool Get(this uint bitArray, int index) => (bitArray >> index) % 2 == 1;
         public static uint Set(this uint bitArray, int index, bool val)
