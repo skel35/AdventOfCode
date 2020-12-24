@@ -57,6 +57,7 @@ namespace AdventOfCode
         }
         public static int ToInt(this char c) => (int) char.GetNumericValue(c);
         public static int ToInt(this string s) => int.Parse(s);
+        public static int[] ToInt(this string[] s) => s.Select(int.Parse).ToArray();
 
         public static long ToLong(this string s) => long.Parse(s);
         public static ulong ToUlong(this string s) => ulong.Parse(s);
