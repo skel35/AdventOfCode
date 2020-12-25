@@ -240,7 +240,8 @@ namespace AdventOfCode._2020
                             0 => 180,
                             1 => 0,
                             2 => 270,
-                            3 => 90
+                            3 => 90,
+                            _ => throw new InvalidOperationException()
                         });
                     }
                     else
@@ -251,7 +252,8 @@ namespace AdventOfCode._2020
                             0 => 0,
                             1 => 180,
                             2 => 90,
-                            3 => 270
+                            3 => 270,
+                            _ => throw new InvalidOperationException()
                         });
                     }
 

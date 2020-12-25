@@ -26,7 +26,8 @@ namespace AdventOfCode._2020
                             'n' when line[i + 1] == 'e' => (cur.R - 1, cur.R % 2 == 0 ? cur.C + 1 : cur.C),
                             'n' when line[i + 1] == 'w' => (cur.R - 1, cur.R % 2 == 0 ? cur.C : cur.C - 1),
                             's' when line[i + 1] == 'e' => (cur.R + 1, cur.R % 2 == 0 ? cur.C + 1 : cur.C),
-                            's' when line[i + 1] == 'w' => (cur.R + 1, cur.R % 2 == 0 ? cur.C : cur.C - 1)
+                            's' when line[i + 1] == 'w' => (cur.R + 1, cur.R % 2 == 0 ? cur.C : cur.C - 1),
+                            _ => throw new InvalidOperationException()
                         };
                         i = line[i] switch
                         {

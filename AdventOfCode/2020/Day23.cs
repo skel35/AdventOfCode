@@ -56,8 +56,8 @@ namespace AdventOfCode._2020
             }
 
             var one = dict[1];
-            var oneNext = one.Next;
-            var oneNextNext = oneNext.Next;
+            var oneNext = one.Next!;
+            var oneNextNext = oneNext.Next!;
             var res = (long) oneNext.Value * (long) oneNextNext.Value;
             Console.WriteLine(res);
         }
