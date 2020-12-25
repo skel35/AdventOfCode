@@ -29,10 +29,11 @@ namespace AdventOfCode
         public void Run()
         {
             CreateInputFile();
-            // var sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
             Solve();
-            // Console.WriteLine("-----------------");
-            // Console.WriteLine(sw.ElapsedMilliseconds + " ms");
+            sw.Stop();
+            Console.WriteLine("-----------------");
+            Console.WriteLine(sw.ElapsedMilliseconds + " ms");
         }
 
         void CreateInputFile()
