@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using AdventOfCode._2020;
+using AdventOfCode._2016;
 
 namespace AdventOfCode
 {
@@ -11,7 +11,7 @@ namespace AdventOfCode
     {
         static void Main()
         {
-            var day = new Day25();
+            var day = new Day9();
             day.Run();
         }
     }
