@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Math;
-using AdventOfCode;
-
 namespace AdventOfCode._2020;
 
 using Rule = Either<string,(int[], int[])>;

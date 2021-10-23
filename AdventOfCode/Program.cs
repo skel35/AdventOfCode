@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using AdventOfCode._2016;
+﻿using AdventOfCode._2016;
 
 namespace AdventOfCode;
 

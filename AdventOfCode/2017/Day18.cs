@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace AdventOfCode._2017;
 
 public class Day18 : Solution

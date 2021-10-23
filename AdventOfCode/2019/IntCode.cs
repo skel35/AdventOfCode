@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace AdventOfCode._2019;
 
 public class Amplifier

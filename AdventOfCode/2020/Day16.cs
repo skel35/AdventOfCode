@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Math;
 using Rule = System.ValueTuple<string, System.Func<int, bool>>;
 
 namespace AdventOfCode._2020;

@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Math;
-using static AdventOfCode.AoC;
-
 namespace AdventOfCode._2019;
 
 public class Day2 : Solution

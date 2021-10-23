@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace AdventOfCode;
+﻿namespace AdventOfCode;
 
 partial class Solution
 {

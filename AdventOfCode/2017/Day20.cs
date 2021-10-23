@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Math;
 using E = AdventOfCode.AoC;
 
 namespace AdventOfCode._2017;
