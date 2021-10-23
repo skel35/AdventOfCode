@@ -8,7 +8,6 @@ namespace FetchInput
 {
     partial class Program
     {
-        //private const string SessionId = "your-session-id-from-cookies";
         private const bool Autodetect = true;
         private const int Day = 3;
         private const int Year = 2020;

@@ -10,7 +10,6 @@ namespace AdventOfCode
 {
     public abstract partial class Solution
     {
-        //private const string SessionId = "your-session-id-from-cookies";
         readonly int _day;
         readonly int _year;
         readonly string _inputFile;
