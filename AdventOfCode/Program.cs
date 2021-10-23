@@ -5,14 +5,13 @@ using System.Linq;
 using System.Xml;
 using AdventOfCode._2016;
 
-namespace AdventOfCode
+namespace AdventOfCode;
+
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main()
-        {
-            var day = new Day10();
-            day.Run();
-        }
+        var day = new Day10();
+        day.Run();
     }
 }

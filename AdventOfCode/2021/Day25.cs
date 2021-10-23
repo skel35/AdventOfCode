@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using static System.Math;
 
-namespace AdventOfCode._2021
+namespace AdventOfCode._2021;
+
+public class Day25 : Solution
 {
-    public class Day25 : Solution
-    {
-        public Day25() : base(25, 2021) { }
-        protected override void Solve()
-        { 
-        }
+    public Day25() : base(25, 2021) { }
+    protected override void Solve()
+    { 
     }
 }
