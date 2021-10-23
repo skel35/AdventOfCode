@@ -1,4 +1,5 @@
-$year = 2020
+$year = 2021
+md -Force "$PSScriptRoot/$year/"
 foreach ($day in 1..25) {
   $code = @"
 using System;
