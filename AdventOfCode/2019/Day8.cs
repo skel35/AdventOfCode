@@ -7,7 +7,7 @@ public class Day8 : Solution
     {
         var W = 25;
         var H = 6;
-        var layers = ReadText().Select(c => c.ToInt()).Window(W*H).ToArray();
+        var layers = ReadText().Select(c => c.ToInt()).Chunk(W*H).ToArray();
         // var minLayer = layers.MinBy(layer => layer.Count(x => x == 0));
         // var res = minLayer.Count(x => x == 1) * minLayer.Count(x => x == 2);
         // Console.WriteLine(res);

@@ -16,5 +16,4 @@ public static partial class AoC
             dictionary[keyToAdd] = updateValueFunc(keyToAdd, dictionary[keyToAdd]);
         }
     }
-
 }

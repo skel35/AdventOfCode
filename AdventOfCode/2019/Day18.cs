@@ -21,8 +21,8 @@ public class Day18 : Solution
         var finalLength = int.MaxValue;
         // var statesDict = new Dictionary<((int r, int c) point, uint keys), int>();
         var statesDict2 = new Dictionary<(V4 points, uint keys), int>();
-        // var frontier = new PriorityQueue<(uint keys, int length, int countKeys, (int r, int c) point)>();
-        var frontier2 = new PriorityQueue<(uint keys, int length, int countKeys, V4 points)>();
+        // var frontier = new PriorityQueue<(uint keys, int length, int countKeys, (int r, int c) point), double>();
+        var frontier2 = new PriorityQueue<(uint keys, int length, int countKeys, V4 points), double>();
         // frontier.Enqueue(initialState, 0); // priority = (double)state.length / state.countKeys
         frontier2.Enqueue(initialState2, 0);
         // statesDict.Add((mid, 0u), 0);

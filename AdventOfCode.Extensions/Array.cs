@@ -64,44 +64,24 @@ public static partial class AoC
     public static IEnumerable<T> Flatten<T>(this T[,] map)
     {
         for (var row = 0; row < map.GetLength(0); row++)
-        {
-            for (var col = 0; col < map.GetLength(1); col++)
-            {
-                yield return map[row,col];
-            }
-        }
+        for (var col = 0; col < map.GetLength(1); col++)
+            yield return map[row, col];
     }
 
     public static IEnumerable<T> Flatten<T>(this T[,,] map)
     {
         for (var row = 0; row < map.GetLength(0); row++)
-        {
-            for (var col = 0; col < map.GetLength(1); col++)
-            {
-                for (var z = 0; z < map.GetLength(2); z++)
-                {
-                    yield return map[row,col,z];
-                }
-            }
-        }
+        for (var col = 0; col < map.GetLength(1); col++)
+        for (var z = 0; z < map.GetLength(2); z++)
+            yield return map[row, col, z];
     }
 
     public static IEnumerable<T> Flatten<T>(this T[,,,] map)
     {
         for (var row = 0; row < map.GetLength(0); row++)
-        {
-            for (var col = 0; col < map.GetLength(1); col++)
-            {
-                for (var z = 0; z < map.GetLength(2); z++)
-                {
-                    for (var w = 0; w < map.GetLength(3); w++)
-                    {
-                        yield return map[row, col, z, w];
-                    }
-                }
-            }
-        }
+        for (var col = 0; col < map.GetLength(1); col++)
+        for (var z = 0; z < map.GetLength(2); z++)
+        for (var w = 0; w < map.GetLength(3); w++)
+            yield return map[row, col, z, w];
     }
-
-
 }

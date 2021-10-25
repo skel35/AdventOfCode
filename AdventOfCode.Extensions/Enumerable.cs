@@ -63,34 +63,7 @@ public static partial class AoC
             i++;
         }
     }
-
-    /// Returns a sequence that yields chunks of length <see cref="chunkSize"/>.
-    /// Each chunk is returned as an array.
-    /// Last chunk can be of size less than <see cref="chunkSize"/>
-    public static IEnumerable<T[]> Window<T>(this IEnumerable<T> collection, int chunkSize)
-    {
-        var temp = new T[chunkSize];
-        var i = 0;
-        using (var enumerator = collection.GetEnumerator())
-        {
-            while (enumerator.MoveNext())
-            {
-                temp[i] = enumerator.Current;
-                i = (i + 1) % chunkSize;
-                if (i == 0)
-                {
-                    yield return temp;
-                    temp = new T[chunkSize];
-                }
-            }
-
-            if (i != 0)
-            {
-                yield return temp[..i];
-            }
-        }
-    }
-        
+    
     public static IEnumerable<TState> Scan<TSource, TState>(
         this IEnumerable<TSource> collection,
         Func<TState, TSource, TState> folder,
@@ -251,5 +224,4 @@ public static partial class AoC
     {
         return (condition(source) ? branchIf : branchElse)(source);
     }
-
 }
