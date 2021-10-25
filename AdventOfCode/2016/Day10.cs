@@ -65,17 +65,10 @@ public class Day10 : Solution
             
     }
     enum DestinationType { Bot, Output };
-
     record Destination(DestinationType Type, int Index);
-
-    interface IInstruction
-    {
-    };
-
+    interface IInstruction{};
     record BotGiveAway(int SourceBot, Destination Low, Destination High) : IInstruction;
-
     record BotGain(int Value, int DestinationBot) : IInstruction;
-
     IInstruction ParseInstruction(string instruction)
         => instruction.StartsWith("bot") ? ParseBotGiveAway(instruction) : ParseBotGain(instruction);
 
@@ -89,11 +82,11 @@ public class Day10 : Solution
     {
         var split = instruction.Split2();
         var sourceBot = split[1].ToInt();
-        DestinationType getType(string typeDescription)
+        DestinationType GetType(string typeDescription)
             => typeDescription == "bot" ? DestinationType.Bot : DestinationType.Output;
 
-        var lowType = getType(split[5]);
-        var highType = getType(split[10]);
+        var lowType = GetType(split[5]);
+        var highType = GetType(split[10]);
         var lowIndex = split[6].ToInt();
         var highIndex = split[11].ToInt();
         var transaction = new BotGiveAway(sourceBot, new(lowType, lowIndex), new(highType, highIndex));
