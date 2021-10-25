@@ -1,3 +1,5 @@
+using RegExtract;
+
 namespace AdventOfCode._2016;
 
 public class Day10 : Solution
@@ -51,7 +53,7 @@ public class Day10 : Solution
             var source = bots[ga.SourceBot];
             void ProcessSingle(DestinationType type, int index, int value)
             {
-                if (type == DestinationType.Output)
+                if (type == DestinationType.output)
                 {
                     outputs.TryAdd(index, new List<int>());
                     outputs[index].Add(value);
@@ -65,34 +67,14 @@ public class Day10 : Solution
             source.Low = 0;
             source.High = 0;
         }
-            
     }
-    enum DestinationType { Bot, Output };
+    enum DestinationType { bot, output };
     record Destination(DestinationType Type, int Index);
     interface IInstruction{};
     record BotGiveAway(int SourceBot, Destination Low, Destination High) : IInstruction;
     record BotGain(int Value, int DestinationBot) : IInstruction;
     IInstruction ParseInstruction(string instruction)
-        => instruction.StartsWith("bot") ? ParseBotGiveAway(instruction) : ParseBotGain(instruction);
-
-    private static BotGain ParseBotGain(string instruction)
-    {
-        var split = instruction.Split2();
-        return new(split[1].ToInt(), split[5].ToInt());
-    }
-
-    private static BotGiveAway ParseBotGiveAway(string instruction)
-    {
-        var split = instruction.Split2();
-        var sourceBot = split[1].ToInt();
-        DestinationType GetType(string typeDescription)
-            => typeDescription == "bot" ? DestinationType.Bot : DestinationType.Output;
-
-        var lowType = GetType(split[5]);
-        var highType = GetType(split[10]);
-        var lowIndex = split[6].ToInt();
-        var highIndex = split[11].ToInt();
-        var transaction = new BotGiveAway(sourceBot, new(lowType, lowIndex), new(highType, highIndex));
-        return transaction;
-    }
+        => instruction.StartsWith("value") 
+            ? instruction.Extract<BotGain>(@"value (\d+) goes to bot (\d+)")!
+            : instruction.Extract<BotGiveAway>(@"bot (\d+) gives low to ((.*) (\d+)) and high to ((.*) (\d+))")!;
 }

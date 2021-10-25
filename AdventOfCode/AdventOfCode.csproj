@@ -11,4 +11,8 @@
       <ProjectReference Include="..\AdventOfCode.Extensions\AdventOfCode.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="RegExtract" Version="1.0.17" />
+    </ItemGroup>
+
 </Project>
