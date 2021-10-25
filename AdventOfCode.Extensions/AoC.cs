@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace AdventOfCode;
 
@@ -33,11 +31,7 @@ public static partial class AoC
     }
 
     public static void Swap<T>(ref T a, ref T b) where T : notnull
-    {
-        var temp = a;
-        a = b;
-        b = temp;
-    }
+        => (a, b) = (b, a);
 
     /// <summary>
     /// l can be either more or less than r.

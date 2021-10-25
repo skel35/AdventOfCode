@@ -22,7 +22,7 @@ public class Day16 : Solution
                 sum += se[i];
                 sb[i] = sum % 10;
             }
-            AoC.Swap(ref se, ref sb);
+            (se, sb) = (sb, se);
         }
 
         se[..8].Print("");

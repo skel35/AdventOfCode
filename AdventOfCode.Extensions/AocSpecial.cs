@@ -24,7 +24,7 @@ public static class AocSpecial
                 var jBack = (current + length) % size;
                 for (var i = 0; i < length / 2; i++)
                 {
-                    Swap(ref list[jFront], ref list[jBack]);
+                    (list[jFront], list[jBack]) = (list[jBack], list[jFront]); 
                     jFront = (jFront + 1) % size;
                     jBack = (jBack - 1 + size) % size;
                 }

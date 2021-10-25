@@ -118,7 +118,7 @@ public class Day24 : Solution
         {
             if (Left > Right)
             {
-                Swap(ref Left, ref Right);
+                (Left, Right) = (Right, Left);
             }
         }
         public void AttachLeft(int ind, int[] val)
