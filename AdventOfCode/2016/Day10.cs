@@ -30,6 +30,9 @@ public class Day10 : Solution
                     giveAways.Remove(kvp.Key);
                 });
         }
+
+        var product = outputs[0].Concat(outputs[1]).Concat(outputs[2]).ProductLong();
+        Console.WriteLine(product);
                 
         void AddValue(BotGain gain) => GiveToBot(gain.DestinationBot, gain.Value);
 
