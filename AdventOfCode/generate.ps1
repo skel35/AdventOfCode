@@ -1,4 +1,4 @@
-$year = 2021
+$year = 2022
 md -Force "$PSScriptRoot/$year/"
 foreach ($day in 1..25) {
   $code = @"
@@ -14,7 +14,7 @@ namespace AdventOfCode._$year
     {
         public Day$day() : base($day, $year) { }
         protected override void Solve()
-        { 
+        {
         }
     }
 }
