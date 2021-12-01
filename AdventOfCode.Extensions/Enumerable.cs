@@ -139,7 +139,7 @@ public static partial class AoC
         return res;
     }
 
-    public static IEnumerable<(TSource, TSource)> Pairwise<TSource>(this IEnumerable<TSource> source)
+    public static IEnumerable<(TSource first, TSource second)> Pairwise<TSource>(this IEnumerable<TSource> source)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
 

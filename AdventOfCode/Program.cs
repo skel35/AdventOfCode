@@ -1,4 +1,4 @@
-﻿using AdventOfCode._2016;
+﻿using AdventOfCode._2021;
 
 namespace AdventOfCode;
 
@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        var day = new Day12();
+        var day = new Day1();
         day.Run();
     }
 }
