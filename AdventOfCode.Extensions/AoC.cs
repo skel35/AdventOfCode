@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace AdventOfCode;
 
@@ -36,6 +37,7 @@ public static partial class AoC
     /// <summary>
     /// l can be either more or less than r.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsBetween(this int a, int l, int r)
     {
         return (a > l && a < r) || (a > r && a < l);
@@ -44,6 +46,7 @@ public static partial class AoC
     /// <summary>
     /// l can be either more or less than r.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsBetweenNonStrict(this int a, int l, int r)
     {
         return (a >= l && a <= r) || (a >= r && a <= l);

@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        var day = new Day3();
+        var day = new Day5();
         day.Run();
     }
 }
