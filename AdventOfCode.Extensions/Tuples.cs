@@ -19,7 +19,7 @@ public static partial class AoC
     public static (int R, int C) Mult(this (int R, int C) t, int n) => (t.R * n, t.C * n);
     public static (int x, int y, int z) Mult(this (int x, int y, int z) t, int n) => (t.x * n, t.y * n, t.z * n);
     public static (int R, int C) Minus(this (int R, int C) t, (int R, int C) b) => (t.R - b.R, t.C - b.C);
-        
+
     public static (int R, int C) Right(this (int R, int C) d) => (d.C, -d.R);
     public static (int R, int C) Left(this (int R, int C) d) => (-d.C, d.R);
     public static (int R, int C) Opposite(this (int R, int C) d) => (-d.R, -d.C);
@@ -55,13 +55,17 @@ public static partial class AoC
         return point.R >= 0 && point.C >= 0 && point.R < grid.Length && point.C < grid[0].Length;
     }
 
-        
+    public static bool InBounds(this (int R, int C) point, string[] grid)
+    {
+        return point.R >= 0 && point.C >= 0 && point.R < grid.Length && point.C < grid[0].Length;
+    }
+
     public static bool OutOfBounds(this (int x, int y, int z) point, int size)
     {
-        return point.x < 0 || point.y < 0 || point.z < 0 || 
+        return point.x < 0 || point.y < 0 || point.z < 0 ||
                point.x >= size || point.y >= size || point.z >= size;
     }
-        
+
     public static bool OutOfBounds(this (int x, int y, int z) point, int sizeX, int sizeY, int sizeZ)
     {
         return point.x < 0 || point.y < 0 || point.z < 0 ||
