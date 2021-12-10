@@ -23,13 +23,6 @@ public class Day10 : Solution
             ['}'] = 1197,
             ['>'] = 25137,
         };
-        // var points2 = new Dictionary<char, int>
-        // {
-        //     [')'] = 1,
-        //     [']'] = 2,
-        //     ['}'] = 3,
-        //     ['>'] = 4,
-        // };
 
         var illegal = new List<char>();
         var scores = new List<BigInteger>();
