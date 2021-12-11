@@ -55,6 +55,11 @@ public static partial class AoC
         return point.R >= 0 && point.C >= 0 && point.R < grid.Length && point.C < grid[0].Length;
     }
 
+    public static bool InBounds<T>(this (int R, int C) point, T[,] grid)
+    {
+        return point.R >= 0 && point.C >= 0 && point.R < grid.GetLength(0) && point.C < grid.GetLength(1);
+    }
+
     public static bool InBounds(this (int R, int C) point, string[] grid)
     {
         return point.R >= 0 && point.C >= 0 && point.R < grid.Length && point.C < grid[0].Length;
