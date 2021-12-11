@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using TextCopy;
 using static System.Console;
 
 namespace AdventOfCode;
@@ -33,11 +34,11 @@ public static partial class AoC
                     Write(str + '_');
                 else Write(str + separator);
             }
-                
+
             WriteLine(twoDimArray[i, twoDimArray.C() - 1]);
         }
     }
-        
+
     public static void Print<T>(this IList<IList<T>> twoDimArray, string separator = " ")
     {
         for (var i = 0; i < twoDimArray.Count; i++)
@@ -45,7 +46,7 @@ public static partial class AoC
             WriteLine(string.Join(separator, twoDimArray[i]));
         }
     }
-        
+
     public static void Print<T>(this IList<T>[] twoDimArray, string separator = " ")
     {
         for (var i = 0; i < twoDimArray.Length; i++)
@@ -61,7 +62,7 @@ public static partial class AoC
             WriteLine(string.Join(separator, twoDimArray[i]));
         }
     }
-        
+
     public static void Print<T>(this T[][] twoDimArray, string separator = " ")
     {
         for (var i = 0; i < twoDimArray.Length; i++)
@@ -71,5 +72,9 @@ public static partial class AoC
     }
 
     public static void Print<T>(this IEnumerable<T> enumerable, string separator = " ") => WriteLine(string.Join(separator, enumerable));
-    public static void Print(this string str) => WriteLine(str);
+    public static void Print(this string str)
+    {
+        WriteLine(str);
+        ClipboardService.SetText(str);
+    }
 }
