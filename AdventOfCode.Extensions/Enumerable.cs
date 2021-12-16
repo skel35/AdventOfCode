@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace AdventOfCode;
 
@@ -10,7 +11,7 @@ public static partial class AoC
     {
         foreach (var item in enumerable) action(item);
     }
-        
+
     public static IEnumerable<T> Concat<T>(this IEnumerable<T> enumerable, params T[] items)
     {
         return Enumerable.Concat(enumerable, items);
@@ -51,7 +52,7 @@ public static partial class AoC
             i++;
         }
     }
-        
+
     public static IEnumerable<TOut> Map<TIn, TOut>(this IEnumerable<TIn> collection, Func<TIn, TOut> func) => collection.Select(func);
 
     public static IEnumerable<TOut> Mapi<TIn, TOut>(this IEnumerable<TIn> collection, Func<int, TIn, TOut> func)
@@ -63,7 +64,7 @@ public static partial class AoC
             i++;
         }
     }
-    
+
     public static IEnumerable<TState> Scan<TSource, TState>(
         this IEnumerable<TSource> collection,
         Func<TState, TSource, TState> folder,
@@ -85,6 +86,12 @@ public static partial class AoC
 
     public static ulong Sum(this IEnumerable<ulong> s)
         => s.Aggregate(0ul, (current, n) => current + n);
+
+    public static BigInteger Sum(this IEnumerable<BigInteger> s)
+        => s.Aggregate(new BigInteger(0), (current, n) => current + n);
+
+    public static BigInteger Product(this IEnumerable<BigInteger> s)
+        => s.Aggregate(new BigInteger(1), (current, n) => current * n);
 
     public static T[] ToArray<T>(this IEnumerable<T> enumerable, int capacity)
     {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace AdventOfCode;
 
@@ -15,6 +16,31 @@ public static partial class AoC
 
         return n;
     }
+
+    public static long ToLong(this IList<bool> boolArray)
+    {
+        var n = 0L;
+        for (var i = 0; i < boolArray.Count; i++)
+        {
+            n *= 2;
+            if (boolArray[i]) n += 1;
+        }
+
+        return n;
+    }
+
+    public static BigInteger ToBigInt(this IList<bool> boolArray)
+    {
+        var n = new BigInteger(0);
+        for (var i = 0; i < boolArray.Count; i++)
+        {
+            n *= 2;
+            if (boolArray[i]) n += 1;
+        }
+
+        return n;
+    }
+
 
     public static int ToInt(this IEnumerable<bool> boolArray)
     {
