@@ -1,3 +1,5 @@
+using static System.Math;
+
 namespace AdventOfCode._2021;
 
 public class Day17 : Solution
@@ -6,32 +8,36 @@ public class Day17 : Solution
     protected override void Solve()
     {
         var (x1, x2, y1, y2) = (102, 157, -146, -90);
-        var start = (X: 0, Y: 0);
-        var velocity = (X: 15, Y: 145);
-        var reached = false;
-        var p = start;
-        var v = velocity;
-        var maxY = 0;
-        for (var i = 0; i < 999999; i++)
-        {
-            p = p.Plus(v);
-            if (v.Y == 0)
-                maxY = p.Y;
-            v = (v.X > 0 ? v.X - 1 : v.X < 0 ? v.X + 1 : 0, v.Y - 1);
-            if (p.X >= x1 && p.X <= x2 && p.Y >= y1 && p.Y <= y2)
-            {
-                reached = true;
-                Console.WriteLine("reached in " + p);
-                break;
-            }
+        // var (x1, x2, y1, y2) = (20, 30, -10, -5);
 
-            if (p.Y < y1 && v.Y < 0)
+        (int X, int Y) getPos((int X, int Y) v, int n)
+        {
+            var x = (v.X + Max(v.X - n + 1, 1)) * Min(n, v.X) / 2;
+            var y = (v.Y + (v.Y - n + 1)) * n / 2;
+            return (x, y);
+        }
+
+        var count = 0;
+        for (var x = 14; x <= 157; x++)
+        // for (var x = 6; x <= 30; x++)
+        {
+            for (var y = -146; y <= 145; y++)
+            // for (var y = -10; y <= 45; y++)
             {
-                Console.WriteLine("won't reach, in " + p);
-                break;
+                for (var n = 1; n <= 292; n++)
+                // for (var n = 0; n <= 90; n++)
+                {
+                    var p = getPos((x, y), n);
+                    if (p.X >= x1 && p.X <= x2 && p.Y >= y1 && p.Y <= y2)
+                    {
+                        count++;
+                        // (x, y).ToString().Print();
+                        break;
+                    }
+                }
             }
         }
 
-        maxY.ToString().Print();
+        count.ToString().Print();
     }
 }
