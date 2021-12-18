@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace AdventOfCode._2021;
 
 public class Day18 : Solution
@@ -5,12 +7,19 @@ public class Day18 : Solution
     public Day18() : base(18, 2021) { }
     protected override void Solve()
     {
-        var res = ReadLines().Select(s => Parse(s, 0, out _)).Aggregate((n1, n2) => n1.Add(n2));
-        res.Magnitude.ToString().Print();
-        // var p1 = Pair.Create(1, 2).Add(Pair.Create(Pair.Create(3, 4), new Number(5)));
-        // Console.WriteLine(p1.Left);
+        var inputString = ReadLines();
+        // var input = ReadLines().Select(s => Parse(s, 0, out _));
+        // var p1 = input.Aggregate((n1, n2) => n1.Add(n2));
+        // p1.Magnitude.ToString().Print();
+
+        var p2 = inputString.Pairs()
+            .SelectMany(x => new[] { Parse(x.first).Add(Parse(x.second)), Parse(x.second).Add(Parse(x.first)) })
+            .Select(x => x.Magnitude)
+            .Max();
+        p2.ToString().Print();
     }
 
+    SnailFishNum Parse(string str) => Parse(str, 0, out _);
     SnailFishNum Parse(string str, int ind, out int length)
     {
         if (char.IsNumber(str[ind]))
@@ -28,9 +37,11 @@ public class Day18 : Solution
         return Pair.Create(left, right);
     }
 
-    abstract record SnailFishNum
+    abstract class SnailFishNum
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract long Magnitude { get; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Pair? Parent { get; set; }
         public Number FindRightMostLeaf() => this switch
         {
@@ -52,11 +63,17 @@ public class Day18 : Solution
             return pair;
         }
 
-        public Pair? Root => Parent is null ? this as Pair : Parent.Root;
+        // public Pair? Root => Parent is null ? this as Pair : Parent.Root;
     }
 
-    record Number(int Value) : SnailFishNum
+    class Number : SnailFishNum
     {
+        public Number(int val)
+        {
+            Value = val;
+        }
+        public int Value { get; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override long Magnitude => Value;
 
         public Pair Split()
@@ -74,7 +91,7 @@ public class Day18 : Solution
         }
     }
 
-    record Pair : SnailFishNum
+    class Pair : SnailFishNum
     {
         public SnailFishNum Left { get; set; }
         public SnailFishNum Right { get; set; }
@@ -126,19 +143,20 @@ public class Day18 : Solution
             }
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override long Magnitude => 3*Left.Magnitude + 2*Right.Magnitude;
 
         public Number? FindLeafToTheLeftOfMe()
         {
             if (Parent is null) return null;
-            return Parent.Left == this
+            return ReferenceEquals(Parent.Left, this)
                 ? Parent.FindLeafToTheLeftOfMe()
                 : Parent.Left.FindRightMostLeaf();
         }
         public Number? FindLeafToTheRightOfMe()
         {
             if (Parent is null) return null;
-            return Parent.Right == this
+            return ReferenceEquals(Parent.Right, this)
                 ? Parent.FindLeafToTheRightOfMe()
                 : Parent.Right.FindLeftMostLeaf();
         }
@@ -149,15 +167,19 @@ public class Day18 : Solution
             (Right is Number).Assert();
             var leftValue = ((Number) Left).Value;
             var rightValue = ((Number) Right).Value;
-            Parent?.FindLeafToTheLeftOfMe()?.Add(leftValue);
-            Parent?.FindLeafToTheRightOfMe()?.Add(rightValue);
+            var leafToTheLeftOfMe = FindLeafToTheLeftOfMe();
+            leafToTheLeftOfMe?.Add(leftValue);
+            var leafToTheRightOfMe = FindLeafToTheRightOfMe();
+            leafToTheRightOfMe?.Add(rightValue);
             Parent?.ReplaceChild(this, new Number(0));
         }
 
         public Pair ReplaceChild(SnailFishNum toReplace, SnailFishNum newChild)
         {
-            Left = Left == toReplace ? newChild : Left;
-            Right = Right == toReplace ? newChild : Right;
+            Left = ReferenceEquals(Left, toReplace) ? newChild : Left;
+            Left.Parent = this;
+            Right = ReferenceEquals(Right, toReplace) ? newChild : Right;
+            Right.Parent = this;
             return this;
         }
     }
