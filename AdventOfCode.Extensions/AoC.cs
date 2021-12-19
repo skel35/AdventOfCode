@@ -54,11 +54,15 @@ public static partial class AoC
 
     public static void Assert(this bool condition)
     {
+#if DEBUG
         if (!condition) throw new InvalidOperationException();
+#endif
     }
     public static void Assert(this bool condition, string assertionMessage)
     {
+#if DEBUG
         if (!condition) throw new InvalidOperationException(assertionMessage);
+#endif
     }
 
 }

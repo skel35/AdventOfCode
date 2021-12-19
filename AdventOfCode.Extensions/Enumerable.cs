@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace AdventOfCode;
 
@@ -10,6 +11,18 @@ public static partial class AoC
     public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
     {
         foreach (var item in enumerable) action(item);
+    }
+
+    public static void Execute<T>(this IEnumerable<T> enumerable)
+    {
+        foreach (var _ in enumerable) { }
+    }
+    public static void ForEach<T, TRes>(this IEnumerable<T> enumerable, Func<T, TRes> func)
+    {
+        foreach (var item in enumerable)
+        {
+            func(item);
+        }
     }
 
     public static IEnumerable<T> Concat<T>(this IEnumerable<T> enumerable, params T[] items)

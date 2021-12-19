@@ -19,6 +19,7 @@ public static partial class AoC
     public static (int R, int C) Mult(this (int R, int C) t, int n) => (t.R * n, t.C * n);
     public static (int x, int y, int z) Mult(this (int x, int y, int z) t, int n) => (t.x * n, t.y * n, t.z * n);
     public static (int R, int C) Minus(this (int R, int C) t, (int R, int C) b) => (t.R - b.R, t.C - b.C);
+    public static (int x, int y, int z) Minus(this (int x, int y, int z) t, (int x, int y, int z) b) => (t.x - b.x, t.y - b.y, t.z - b.z);
 
     public static (int R, int C) Right(this (int R, int C) d) => (d.C, -d.R);
     public static (int R, int C) Left(this (int R, int C) d) => (-d.C, d.R);
@@ -224,6 +225,11 @@ public readonly struct T3 : IEquatable<T3>, IEquatable<(int x, int y, int z)>
     public static bool operator !=(T3 left, T3 right)
     {
         return !(left == right);
+    }
+
+    public static T3 operator -(T3 left)
+    {
+        return new(-left.X, -left.Y, -left.Z);
     }
 }
 

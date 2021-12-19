@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode;
 
 public static partial class AoC
 {
+    public static int MaxOrDefault(this IEnumerable<int> enumerable, int defaultValue = default)
+        => enumerable.DefaultIfEmpty(defaultValue).Max();
     public static (int item, int index) MaxWithIndex(this IEnumerable<int> enumerable)
     {
         var maxV = int.MinValue;

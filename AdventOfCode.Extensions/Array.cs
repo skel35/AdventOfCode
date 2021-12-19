@@ -84,4 +84,17 @@ public static partial class AoC
         for (var w = 0; w < map.GetLength(3); w++)
             yield return map[row, col, z, w];
     }
+
+    public static void InitWith<T>(this T[] array, T value)
+    {
+        for (var i = 0; i < array.Length; i++) array[i] = value;
+    }
+
+    public static void InitWith<T>(this T[] array, Func<T> getValue)
+    {
+        for (var i = 0; i < array.Length; i++) array[i] = getValue();
+    }
+
+    public static Dictionary<T, int> ReverseMapping<T>(this T[] array) where T : notnull
+        => array.WithIndex().ToDictionary(x => x.Item, x => x.Index);
 }
