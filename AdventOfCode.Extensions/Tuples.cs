@@ -94,8 +94,19 @@ public static partial class AoC
         var (r, c) = point;
         return new[]
         {
-            (r - 1, c), (r - 1, c - 1), (r - 1, c + 1),
+            (r - 1, c - 1), (r - 1, c), (r - 1, c + 1),
             (r, c - 1), (r, c + 1),
+            (r + 1, c - 1), (r + 1, c), (r + 1, c + 1)
+        };
+    }
+
+    public static (int R, int C)[] Gen9Adjacent(this (int R, int C) point)
+    {
+        var (r, c) = point;
+        return new[]
+        {
+            (r - 1, c - 1), (r - 1, c), (r - 1, c + 1),
+            (r, c - 1), (r, c), (r, c + 1),
             (r + 1, c - 1), (r + 1, c), (r + 1, c + 1)
         };
     }
