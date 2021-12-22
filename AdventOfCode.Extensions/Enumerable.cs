@@ -128,7 +128,7 @@ public static partial class AoC
 
     public static (T first, T second)[] Pairs<T>(this T[] array)
     {
-        if (array.Length < 2) throw new ArgumentException(nameof(array));
+        if (array.Length < 2) return Array.Empty<(T first, T second)>();
         var res = new (T first, T second)[array.Length * (array.Length - 1) / 2];
         var count = 0;
         for (var i = 0; i < array.Length - 1; i++)
