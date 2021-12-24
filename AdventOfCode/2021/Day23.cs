@@ -8,32 +8,14 @@ public class Day23 : Solution
 
     protected override void Solve()
     {
-        // var grid = ReadLines();
-        // var slots = new[]
-        // {
-        //     (1, 1),
-        //     (1, 2),
-        //     (1, 4),
-        //     (1, 6),
-        //     (1, 8),
-        //     (1, 10),
-        //     (1, 11),
-        // };
-        // var rooms = new[]
-        // {
-        //     new[] { (2, 3), (3, 3) },
-        //     new[] { (2, 5), (3, 5) },
-        //     new[] { (2, 7), (3, 7) },
-        //     new[] { (2, 9), (3, 9) },
-        // };
         var rooms = new[]
         {
-            new byte[] { 8, 9 },
-            new byte[] { 10, 11 },
-            new byte[] { 12, 13 },
-            new byte[] { 14, 15 },
+            new byte[] { 8,  9,  10, 11 },
+            new byte[] { 12, 13, 14, 15 },
+            new byte[] { 16, 17, 18, 19 },
+            new byte[] { 20, 21, 22, 23 },
         };
-        int GetRoom(int val) => (val - 8) / 2;
+        int GetRoom(int val) => (val - 8) / 4;
 
         IEnumerable<int> SlotsBetweenRooms(int room1, int room2)
         {
@@ -57,51 +39,25 @@ public class Day23 : Solution
         // var r2 = SlotsBetweenSlotAndRoom(0, 1).ToArray(); // 0, 1, 2
         // var r3 = SlotsBetweenSlotAndRoom(6, 0).ToArray(); // 2, 3, 4, 5, 6
 
-        var initState = new State2(11, 13, 9, 14, 12, 15, 8, 10);
-        var states = new[]
-        {
-            new State2(11, 13, 9, 14, 12, 15, 8, 10),
-            new State2(11, 13, 9, 14, 4,  15, 8, 10),
-            new State2(11, 0,  9, 14, 4,  15, 8, 10),
-            new State2(11, 0,  9, 14, 13, 15, 8, 10),
-            new State2(11, 0,  9, 5,  13, 15, 8, 10),
-            new State2(11, 0,  9, 5,  13, 12, 8, 10),
-            new State2(11, 0,  9, 5,  13, 12, 8, 15),
-            new State2(11, 0,  9, 5,  13, 12, 14, 15),
-            new State2(1,  0,  9, 5,  13, 12, 14, 15),
-            new State2(1,  0,  9, 11, 13, 12, 14, 15),
-            new State2(1,  0, 10, 11, 13, 12, 14, 15),
-            new State2(9,  0, 10, 11, 13, 12, 14, 15),
-            new State2(9,  8, 10, 11, 13, 12, 14, 15)
-        };
+        var initState = new State2(
+            new SubState(15, 19, 18, 21),
+            new SubState(11, 20, 14, 17),
+            new SubState(16, 23, 13, 22),
+            new SubState(8,  12, 9,  10));
 
-        // var initState = new State2(9, 8, 1, 6, 4, 5, 14, 15);
-        // var initState = new State2(9, 13, 10, 11, 12, 5, 14, 15);
         var frontier = new PriorityQueue<State2, int>();
         frontier.Enqueue(initState, initState.MinPossible());
         var visited = new Dictionary<State2, int>();
         var enqueued = new Dictionary<State2, int>();
         var minScore = int.MaxValue;
         var minItem = initState;
-        // var farthestState = initState;
-        // var maxInItsPlace = 1;
         while (frontier.Count > 0)
         {
             frontier.TryDequeue(out var item, out var priority);
-            if (item.Equals(states[11]))
-            {
-                Console.WriteLine("test");
-            }
             if (priority >= minScore)
                 continue;
             var score = priority - item.MinPossible();
             visited[item] = score;
-            // var inItsPlace = item.InItsPlace();
-            // if (inItsPlace > maxInItsPlace)
-            // {
-            //     maxInItsPlace = inItsPlace;
-            //     farthestState = item;
-            // }
 
             if (item.IsFinal())
             {
@@ -130,14 +86,6 @@ public class Day23 : Solution
                 {
                     frontier.Enqueue(newItem, newPriority);
                     enqueued[newItem] = newPriority;
-                    if (newItem.Equals(states[11]))
-                    {
-                        Console.WriteLine("test");
-                    }
-                    if (newItem.Equals(states[12]))
-                    {
-                        Console.WriteLine("test");
-                    }
                 }
             }
 
@@ -147,33 +95,45 @@ public class Day23 : Solution
             {
                 var (val, targetRoomIndex, index) = amphipods[i];
                 var targetRoom = rooms[targetRoomIndex];
-                if (val >= 8 && val % 2 == 1)
+                if (val >= 8)
                 {
-                    if (amphipods.Any(x => x.val == val - 1)) // someone above us in the same room
-                        continue;
+                    // check if someone is above us in the same room
+                    for (var j = 0; j < val % 4; j++)
+                    {
+                        var posToCheck = val - (val % 4) + j;
+                        if (amphipods.Any(x => x.val == posToCheck))
+                            goto endLoop3;
+                    }
                 }
                 // 1. straight into a room
                 {
                     // skip if in target slot
-                    if (val == targetRoom[1] || val == targetRoom[0])
+                    if (targetRoom.Contains(val))
                         goto endLoop;
 
-                    var targetVal = targetRoom[1];
-                    if (amphipods.Any(x => x.val == targetRoom[0]))
-                        goto endLoop;
-                    var inDeep = amphipods.FirstOrDefault(x => x.val == targetRoom[1]);
-                    if (inDeep != default)
+                    var targetValIndex = 3;
+                    for (var j = 3; j >= 0; j--)
                     {
-                        if (inDeep.targetRoom != targetRoomIndex)
-                            goto endLoop;
-                        targetVal = targetRoom[0]; // our teammate is already in target room
+                        var tar = targetRoom[j];
+                        var inDeep2 = amphipods.FirstOrDefault(x => x.val == tar);
+                        if (inDeep2 != default)
+                        {
+                            if (inDeep2.targetRoom != targetRoomIndex)
+                                goto endLoop;
+                            targetValIndex = j - 1; // our teammate is already in target room
+                        }
                     }
+
+                    if (targetValIndex < 0)
+                        goto endLoop;
+
+                    var targetVal = targetRoom[targetValIndex];
 
                     if (val >= 8)
                     {
                         // we're currently in some other room
                         var ourRoomIndex = GetRoom(val);
-                        var stepsCount = (targetVal == targetRoom[1] ? 1 : 0) + (val % 2) + 2;
+                        var stepsCount = targetValIndex + (val % 4) + 2;
                         //  check if someone in the slots between rooms
                         foreach (var slotInd in SlotsBetweenRooms(ourRoomIndex, targetRoomIndex))
                         {
@@ -199,7 +159,8 @@ public class Day23 : Solution
                                 stepsCount++;
                         }
 
-                        stepsCount += targetVal % 2;
+                        stepsCount += targetVal % 4;
+                        (targetVal % 4 == targetValIndex).Assert();
                         var newItem = item.SetIndex(i, targetVal);
                         var newScore = score + stepsCount * (int)Pow(10, targetRoomIndex);
                         Enqueue(newItem, newScore);
@@ -210,17 +171,28 @@ public class Day23 : Solution
                 // 2: into some slot
                 {
                     if (val < 8) continue;
-                    // skip if in target slot
-                    if (val == targetRoom[1])
-                        continue;
-                    if (val == targetRoom[0] &&
-                        amphipods.Single(a => a.targetRoom == targetRoomIndex && a.index != index).val == targetRoom[1])
-                        continue;
+                    // skip if in target room
+                    var inTargetRoomIndex = Array.IndexOf(targetRoom, val);
+                    if (inTargetRoomIndex != -1)
+                    {
+                        var allBelowAreTeammates = true;
+                        for (var j = inTargetRoomIndex + 1; j <= 3; j++)
+                        {
+                            if (!amphipods.Any(a => a.targetRoom == targetRoomIndex && a.index != index && a.val == targetRoom[j]))
+                            {
+                                allBelowAreTeammates = false;
+                            }
+                        }
+
+                        if (allBelowAreTeammates)
+                            continue;
+                    }
+
                     var ourRoomIndex = GetRoom(val);
 
                     for (byte j = 0; j < 7; j++)
                     {
-                        var stepsCount = (val % 2);
+                        var stepsCount = (val % 4);
                         foreach (var slotInd in SlotsBetweenSlotAndRoom(j, ourRoomIndex))
                         {
                             if (amphipods.Any(x => x.val == slotInd))
@@ -237,6 +209,7 @@ public class Day23 : Solution
                         endLoop2: ;
                     }
                 }
+                endLoop3: ;
             }
 
         }
@@ -258,121 +231,123 @@ public class Day23 : Solution
     //     }
     // }
 
-    private readonly record struct State2(byte A1, byte A2, byte B1, byte B2, byte C1, byte C2, byte D1, byte D2)
+    private readonly record struct SubState(byte X1, byte X2, byte X3, byte X4)
     {
-        public bool IsFinal() => A1 is 8 or 9 && A2 is 8 or 9
-                              && B1 is 10 or 11 && B2 is 10 or 11
-                              && C1 is 12 or 13 && C2 is 12 or 13
-                              && D1 is 14 or 15 && D2 is 14 or 15;
-
-        public int InItsPlace()
+        public IEnumerable<byte> Items()
         {
-            var res = 0;
-            if (A1 is 8 or 9) res++;
-            if (A2 is 8 or 9) res++;
-            if (B1 is 10 or 11) res++;
-            if (B2 is 10 or 11) res++;
-            if (C1 is 12 or 13) res++;
-            if (C2 is 12 or 13) res++;
-            if (D1 is 14 or 15) res++;
-            if (D2 is 14 or 15) res++;
-            return res;
+            yield return X1;
+            yield return X2;
+            yield return X3;
+            yield return X4;
+        }
+        public (byte x1, byte x2, byte x3, byte x4) Sorted()
+        {
+            var temp = new[] { X1, X2, X3, X4 }.OrderBy(x => x).ToArray();
+            return (temp[0], temp[1], temp[2], temp[3]);
         }
 
-        public int Util()
+        public SubState SetIndex(int index, byte val)
         {
-            var res = 0;
-            if ((A1, A2) is (8, 9) or (9, 8)) res += 2;
-            else if (A1 is 9 || A2 is 9) res++;
-            if ((B1, B2) is (10, 11) or (11, 10)) res += 20;
-            else if (B1 is 10 || B2 is 11) res += 10;
-            if ((C1, C2) is (12, 13) or (13, 12)) res += 200;
-            else if (C1 is 13 || C2 is 13) res += 100;
-            if ((D1, D2) is (15, 14) or (14, 15)) res += 2000;
-            else if (D1 is 15 || D2 is 15) res += 1000;
-            return res * 8;
+            return index switch
+            {
+                0 => this with { X1 = val },
+                1 => this with { X2 = val },
+                2 => this with { X3 = val },
+                3 => this with { X4 = val },
+                _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
+            };
+        }
+    }
+    private readonly record struct State2(SubState A, SubState B, SubState C, SubState D)
+    {
+        public SubState[] SubStates()
+        {
+            return new[] { A, B, C, D };
+        }
+        public bool IsFinal()
+        {
+            var subStates = SubStates();
+            for (var i = 0; i < subStates.Length; i++)
+            {
+                var start = 8 + i * 4;
+                if (subStates[i].Sorted() != (start, start + 1, start + 2, start + 3)) return false;
+            }
+
+            return true;
         }
 
         public int MinPossible()
         {
             var res = 0;
-            if (A1 is 0 || A2 is 0) res += 3;
-            if (A1 is 1 || A2 is 1) res += 2;
-            if (A1 is 2 || A2 is 2) res += 2;
-            if (A1 is 3 || A2 is 3) res += 4;
-            if (A1 is 4 || A2 is 4) res += 6;
-            if (A1 is 5 || A2 is 5) res += 8;
-            if (A1 is 6 || A2 is 6) res += 9;
+            if (A.Items().Any(x => x == 0)) res += 3;
+            if (A.Items().Any(x => x == 1)) res += 2;
+            if (A.Items().Any(x => x == 2)) res += 2;
+            if (A.Items().Any(x => x == 3)) res += 4;
+            if (A.Items().Any(x => x == 4)) res += 6;
+            if (A.Items().Any(x => x == 5)) res += 8;
+            if (A.Items().Any(x => x == 6)) res += 9;
 
-            if (B1 is 0 || B2 is 0) res += 50;
-            if (B1 is 1 || B2 is 1) res += 40;
-            if (B1 is 2 || B2 is 2) res += 20;
-            if (B1 is 3 || B2 is 3) res += 20;
-            if (B1 is 4 || B2 is 4) res += 40;
-            if (B1 is 5 || B2 is 5) res += 60;
-            if (B1 is 6 || B2 is 6) res += 70;
+            if (B.Items().Any(x => x == 0)) res += 50;
+            if (B.Items().Any(x => x == 1)) res += 40;
+            if (B.Items().Any(x => x == 2)) res += 20;
+            if (B.Items().Any(x => x == 3)) res += 20;
+            if (B.Items().Any(x => x == 4)) res += 40;
+            if (B.Items().Any(x => x == 5)) res += 60;
+            if (B.Items().Any(x => x == 6)) res += 70;
 
-            if (C1 is 0 || C2 is 0) res += 700;
-            if (C1 is 1 || C2 is 1) res += 600;
-            if (C1 is 2 || C2 is 2) res += 400;
-            if (C1 is 3 || C2 is 3) res += 200;
-            if (C1 is 4 || C2 is 4) res += 200;
-            if (C1 is 5 || C2 is 5) res += 400;
-            if (C1 is 6 || C2 is 6) res += 500;
+            if (C.Items().Any(x => x == 0)) res += 700;
+            if (C.Items().Any(x => x == 1)) res += 600;
+            if (C.Items().Any(x => x == 2)) res += 400;
+            if (C.Items().Any(x => x == 3)) res += 200;
+            if (C.Items().Any(x => x == 4)) res += 200;
+            if (C.Items().Any(x => x == 5)) res += 400;
+            if (C.Items().Any(x => x == 6)) res += 500;
 
-            if (D1 is 0 || D2 is 0) res += 9000;
-            if (D1 is 1 || D2 is 1) res += 8000;
-            if (D1 is 2 || D2 is 2) res += 6000;
-            if (D1 is 3 || D2 is 3) res += 4000;
-            if (D1 is 4 || D2 is 4) res += 2000;
-            if (D1 is 5 || D2 is 5) res += 2000;
-            if (D1 is 6 || D2 is 6) res += 3000;
+            if (D.Items().Any(x => x == 0)) res += 9000;
+            if (D.Items().Any(x => x == 1)) res += 8000;
+            if (D.Items().Any(x => x == 2)) res += 6000;
+            if (D.Items().Any(x => x == 3)) res += 4000;
+            if (D.Items().Any(x => x == 4)) res += 2000;
+            if (D.Items().Any(x => x == 5)) res += 2000;
+            if (D.Items().Any(x => x == 6)) res += 3000;
 
-            if (A1 is >= 10 and <= 15) res += A1 - 6;
-            if (A2 is >= 10 and <= 15) res += A2 - 6;
-            if (B1 is >= 12 and <= 15) res += (B1 - 5)*10;
-            if (B2 is >= 12 and <= 15) res += (B2 - 5)*10;
-            if (B1 is >= 8 and <= 9) res += (B1 - 4)*10;
-            if (B2 is >= 8 and <= 9) res += (B2 - 4)*10;
-            if (C1 is >= 14 and <= 15) res += (C1 - 3)*100;
-            if (C2 is >= 14 and <= 15) res += (C2 - 3)*100;
-            if (C1 is >= 8 and <= 9) res += (C1 - 2)*100;
-            if (C2 is >= 8 and <= 9) res += (C2 - 2)*100;
-            if (C1 is >= 10 and <= 11) res += (C1 - 6)*100;
-            if (C2 is >= 10 and <= 11) res += (C2 - 6)*100;
+            A.Items().ForEach(x => { if (x is >= 12 and <= 15) res += x - 8; });
+            A.Items().ForEach(x => { if (x is >= 16 and <= 19) res += x - 10; });
+            A.Items().ForEach(x => { if (x is >= 20 and <= 23) res += x - 12; });
 
-            if (D1 is >= 8 and <= 13) res += (8 - 2 * ((D1 - 8) / 2) + D1 % 2) * 1000;
-            if (D2 is >= 8 and <= 13) res += (8 - 2 * ((D2 - 8) / 2) + D2 % 2) * 1000;
+            B.Items().ForEach(x => { if (x is >= 16 and <= 19) res += (x - 12)*10; });
+            B.Items().ForEach(x => { if (x is >= 20 and <= 23) res += (x - 14)*10; });
+            B.Items().ForEach(x => { if (x is >= 8 and <= 11) res += (x - 4)*10; });
+
+            C.Items().ForEach(x => { if (x is >= 8 and <= 11) res += (x - 2)*100; });
+            C.Items().ForEach(x => { if (x is >= 12 and <= 15) res += (x - 8)*100; });
+            C.Items().ForEach(x => { if (x is >= 20 and <= 23) res += (x - 16)*10; });
+
+            D.Items().ForEach(x => { if (x is >= 8 and <= 11) res += (x - 0)*100; });
+            D.Items().ForEach(x => { if (x is >= 12 and <= 15) res += (x - 6)*100; });
+            D.Items().ForEach(x => { if (x is >= 16 and <= 19) res += (x - 12)*10; });
+
             return res;
         }
 
         public (byte val, int targetRoom, int index)[] Amphipods()
         {
-            return new[]
-            {
-                (A1, 0, 0),
-                (A2, 0, 1),
-                (B1, 1, 0),
-                (B2, 1, 1),
-                (C1, 2, 0),
-                (C2, 2, 1),
-                (D1, 3, 0),
-                (D2, 3, 1),
-            };
+            return A.Items()
+                .Select((v, i) => (v, 0, i))
+                .Concat(B.Items().Select((v, i) => (v, 1, i)))
+                .Concat(C.Items().Select((v, i) => (v, 2, i)))
+                .Concat(D.Items().Select((v, i) => (v, 3, i)))
+                .ToArray();
         }
 
         public State2 SetIndex(int index, byte val)
         {
-            return index switch
+            return (index / 4) switch
             {
-                0 => this with { A1 = val },
-                1 => this with { A2 = val },
-                2 => this with { B1 = val },
-                3 => this with { B2 = val },
-                4 => this with { C1 = val },
-                5 => this with { C2 = val },
-                6 => this with { D1 = val },
-                7 => this with { D2 = val },
+                0 => this with { A = A.SetIndex(index % 4, val) },
+                1 => this with { B = B.SetIndex(index % 4, val) },
+                2 => this with { C = C.SetIndex(index % 4, val) },
+                3 => this with { D = D.SetIndex(index % 4, val) },
                 _ => throw new InvalidOperationException()
             };
         }
