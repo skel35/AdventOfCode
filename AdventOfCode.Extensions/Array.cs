@@ -60,6 +60,16 @@ public static partial class AoC
         Array.Copy(source, res, source.Length);
         return res;
     }
+    public static T[][] DeepCopy<T>(this T[][] source)
+    {
+        var res = new T[source.Length][];
+        for (var i = 0; i < res.Length; i++)
+        {
+            res[i] = new T[source[i].Length];
+            Array.Copy(source[i], res[i], source[i].Length);
+        }
+        return res;
+    }
 
     public static IEnumerable<T> Flatten<T>(this T[,] map)
     {
